@@ -1,9 +1,0 @@
-hazelcast:
-  network:
-    join:
-      multicast:
-        enabled: true
-        
-  cluster-name: dev
-  management-center:
-    scripting-enabled: false      
