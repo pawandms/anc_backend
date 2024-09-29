@@ -1,0 +1,24 @@
+#Local MongoDB config
+#spring.data.mongodb.authentication-database=admin
+#spring.data.mongodb.username=Admin
+#spring.data.mongodb.password=Mumbai@123
+#spring.data.mongodb.port=27017
+#spring.data.mongodb.host=localhost
+#spring.data.mongodb.database=moviedb
+#spring.data.mongodb.uri=mongodb://Admin:Mumbai%40123@localhost:27017/?authSource=admin&replicaSet=videoApp&readPreference=primary&appname=MongoDB%20Compass&ssl=false
+
+
+#app config in Used
+
+
+#server.port=8102
+#mongodb.database=moviedb
+#mongodb.uri=mongodb://Admin:Mumbai%40123@localhost:27020/?authSource=admin&replicaSet=videoApp&readPreference=primary&ssl=false
+#server.name=localhost
+#server.protocol= http
+#server.url=${server.protocol}://${server.name}:${server.port}
+#media.url = #{server.url}/media/
+
+
+
+
