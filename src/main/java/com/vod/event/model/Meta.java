@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vod.msg.enums.UserActionStatusType;
 import com.vod.msg.enums.UserActionType;
 import com.vod.msg.enums.VisibilityType;
 
@@ -19,6 +20,8 @@ public class Meta implements Serializable {
 	private List<String> tag;
 	private EventLocation loc;
 	private String value;
+	private UserActionStatusType  actionStatus;
+	private String srcActionID;
 	
 	public String getUserId() {
 		return userId;
@@ -84,7 +87,20 @@ public class Meta implements Serializable {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-	
 
+	public UserActionStatusType getActionStatus() {
+		return actionStatus;
+	}
+
+	public void setActionStatus(UserActionStatusType actionStatus) {
+		this.actionStatus = actionStatus;
+	}
+
+	public String getSrcActionID() {
+		return srcActionID;
+	}
+
+	public void setSrcActionID(String srcActionID) {
+		this.srcActionID = srcActionID;
+	}
 }

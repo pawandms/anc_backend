@@ -32,6 +32,7 @@ public enum SequenceType {
 	EventNotification("EventNotification"),
 	UserConnection("UserConnection"),
 	EventLog("EventLog"),
+	ActionLog("ActionLog"),
 	UUID("UUID"),
 	;
 	

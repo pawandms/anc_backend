@@ -13,6 +13,9 @@ import java.util.Set;
 import java.util.function.LongSupplier;
 import java.util.stream.Collectors;
 
+import com.vod.app.action.service.ActionLogService;
+import com.vod.app.action.util.ActionLogUtil;
+import com.vod.app.action.vo.ActionLogReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +126,13 @@ public class MsgServiceImpl implements MsgService {
 
 	@Autowired
 	private EventLogService eventLogService;
-	
+
+	@Autowired
+	private ActionLogUtil actionLogUtil;
+
+	@Autowired
+	private ActionLogService actionLogService;
+
 	@Override
 	public Message addMessage(MessageActionVo request) throws MsgServiceException {
 		Date startT = new Date();
@@ -845,7 +854,9 @@ public class MsgServiceImpl implements MsgService {
 			msgDao.addUpdateMsgReactionByUser(msgID, chnlID, userID, tr_date, msgReaction);
 			
 			// Send Event to EventLogService
-			eventLogService.createMsgAddReactionEvent(userID, userID, chnlID, msgID, msgReaction);
+			//eventLogService.createMsgAddReactionEvent(userID, userID, chnlID, msgID, msgReaction);
+			ActionLogReq actionLogReq =  actionLogUtil.createAddMsgReactionReqLog(userID, null,chnlID, msgID, msgReaction);
+			actionLogService.processActionLogRequest(actionLogReq);
 			
 		}
 		catch(Exception e)

@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.vod.app.action.service.ActionLogService;
+import com.vod.app.action.util.ActionLogUtil;
+import com.vod.app.action.vo.ActionLogReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +92,13 @@ public class AppUserService {
 	
 	@Autowired
 	private EventLogService eventLogService;
-	
+
+	@Autowired
+	private ActionLogUtil actionLogUtil;
+
+	@Autowired
+	private ActionLogService actionLogService;
+
 	public void performUserAction(UserActionVo req) throws UserServiceException
 	{
 		try {
@@ -237,17 +246,7 @@ public class AppUserService {
 						request.setTrgUser(trgUser);
 					}
 					
-					// Get All the EventLog Belongs to both Users
-					List<EventLog> userConnectionLogs = eventLogService.getConnectionBetweenTwoUser(request.getSrcUserID(), request.getTrgUserID());
-				
-					if(!userConnectionLogs.isEmpty())
-					{
-						
-					}
-					
-					logger.info("UC Size:"+userConnectionLogs.size());
-					
-					// Check if There is already Pending Request for Same Pair of Users 
+					// Check if There is already Pending Request for Same Pair of Users
 					List<EventNotification> pendingEvents = eventNotificationRep.findBySrcUserIDAndTrgUserIDAndSrcActionAndProcessFlag(request.getSrcUserID(), request.getTrgUserID(), 
 							request.getActionType(), false);
 					
@@ -486,6 +485,11 @@ public class AppUserService {
 			// Step 3 : Persist Data to DB
 			saveAddFriendReqToDb(event,ucList, null, null);
 			req.setActionRespType(EventActionType.Add_Friend_Req_Sent);
+
+			// Step 4 : Add Action Log for Notificaiotn
+			ActionLogReq actionLogReq =  actionLogUtil.createAddUserConnectionReqLogs(req.getReqUserID(), req.getSrcUserID(), req.getTrgUserID());
+			actionLogService.processActionLogRequest(actionLogReq);
+
 		}
 		catch(Exception e)
 		{
@@ -506,8 +510,6 @@ public class AppUserService {
 			event.setResponseDate(req.getToday());
 			event.setProcessFlag(true);
 			
-			
-			
 			// Step 2 : Prepare UserFriend Entity Object
 			List<UserConnection> ucList  = helperBean.prepareUserConnections(req.getUserConnectionId(),UserConnectionStatusType.Add,  req.getSrcUserID(), req.getTrgUserID(), req.getReqUserID(), req.getToday());
 			
@@ -523,10 +525,8 @@ public class AppUserService {
 			
 			
 			// Send EventLog to EventLogging Service
-			eventLogService.createAddUserConnectionEvent(req.getReqUserID(), req.getSrcUserID(), req.getTrgUserID());
-			
-			
-			
+			eventLogService.createAddUserConnectionEvent(req.getReqUserID(), req.getSrcUserID(), req.getTrgUserID(), UserActionStatusType.Auto_Approve );
+
 		}
 		catch(Exception e)
 		{
@@ -535,7 +535,7 @@ public class AppUserService {
 	}
 	
 	@Transactional
-	private void saveAddFriendReqToDb(EventNotification event,List<UserConnection> ucList, Channel chnl, List<ChannelParticipant> cpList ) throws UserServiceException
+	public void saveAddFriendReqToDb(EventNotification event,List<UserConnection> ucList, Channel chnl, List<ChannelParticipant> cpList ) throws UserServiceException
 	{
 		try {
 			
@@ -619,7 +619,7 @@ public class AppUserService {
 	
 	
 	@Transactional
-	private void saveRemoveFriendReqToDb(EventNotification event) throws UserServiceException
+	public void saveRemoveFriendReqToDb(EventNotification event) throws UserServiceException
 	{
 		try {
 				// Delete U1 =?
@@ -700,11 +700,11 @@ public class AppUserService {
 			// Send EventLog to EventLogging Service
 			if(req.getActionStatus().equals(UserActionStatusType.Approve))
 			{
-				eventLogService.createAddUserConnectionEvent(event.getSrcUserID(), event.getSrcUserID(), event.getTrgUserID());	
+				eventLogService.createAddUserConnectionEvent(event.getSrcUserID(), event.getSrcUserID(), event.getTrgUserID(), req.getActionStatus() );
 			}
 			else if(req.getActionStatus().equals(UserActionStatusType.Block))
 			{
-				eventLogService.createBlockUserConnectionEvent(req.getReqUserID(), event.getTrgUserID(), event.getSrcUserID());
+				eventLogService.createBlockUserConnectionEvent(req.getReqUserID(), event.getTrgUserID(), event.getSrcUserID(), req.getActionStatus() );
 			}
 			
 		}

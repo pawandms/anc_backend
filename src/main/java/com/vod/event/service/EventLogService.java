@@ -2,6 +2,10 @@ package com.vod.event.service;
 
 import java.util.List;
 
+import com.vod.app.action.service.ActionLogService;
+import com.vod.app.action.util.ActionLogUtil;
+import com.vod.app.action.vo.ActionLogReq;
+import com.vod.msg.enums.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,11 +22,6 @@ import com.vod.event.model.EventLogReq;
 import com.vod.event.repository.EventLogDao;
 import com.vod.event.repository.EventLogRep;
 import com.vod.exception.UserServiceException;
-import com.vod.msg.enums.EventEntityType;
-import com.vod.msg.enums.EventLogSubType;
-import com.vod.msg.enums.EventLogType;
-import com.vod.msg.enums.UserActionType;
-import com.vod.msg.enums.VisibilityType;
 import com.vod.msg.service.NatsService;
 import com.vod.util.EnvProp;
 import com.vod.util.HelperBean;
@@ -53,6 +52,12 @@ public class EventLogService {
 	
 	@Autowired
 	private NatsService natsService;
+
+	@Autowired
+	private ActionLogUtil actionLogUtil;
+
+	@Autowired
+	private ActionLogService actionLogService;
 	
 	
 	@Async
@@ -201,11 +206,13 @@ public class EventLogService {
 	
 	
 	@Async
-	public void createAddUserConnectionEvent(String reqUserID, String firstUserID, String secondUserID) throws EventLogServiceException
+	public void createAddUserConnectionEvent(String reqUserID, String firstUserID, String secondUserID, UserActionStatusType actStatus) throws EventLogServiceException
 	{
 		try {
 		
 			EventLogReq req = eventLogUtil.createAddUserConnectionEventLogs(reqUserID, firstUserID, secondUserID);
+			ActionLogReq actLogReq = actionLogUtil.createAddUserConnectionEventLogs(reqUserID,firstUserID, secondUserID, actStatus);
+			actionLogService.processActionLogRequest(actLogReq);
 			sendEventLogToQueue(req);
 			
 		}
@@ -236,7 +243,7 @@ public class EventLogService {
 	
 	
 	@Async
-	public void createBlockUserConnectionEvent(String reqUserID, String firstUserID, String secondUserID) throws EventLogServiceException
+	public void createBlockUserConnectionEvent(String reqUserID, String firstUserID, String secondUserID, UserActionStatusType actStatus) throws EventLogServiceException
 	{
 		try {
 		
@@ -257,7 +264,10 @@ public class EventLogService {
 	{
 		try {
 		
-			EventLogReq req = eventLogUtil.creatUserCreateEventLogs(reqUserID, userID, firstName, lastName, visibility);
+			EventLogReq req = eventLogUtil.createUserCreateEventLogs(reqUserID, userID, firstName, lastName, visibility);
+			ActionLogReq actReq = actionLogUtil.createUserCreateEventLogs(reqUserID, userID, firstName, lastName, visibility);
+			actionLogService.processActionLogRequest(actReq);
+
 			sendEventLogToQueue(req);
 			
 		}
@@ -305,6 +315,7 @@ public class EventLogService {
 	}
 	
 	@Async
+	@Deprecated
 	public void createMsgAddReactionEvent(String reqUserID, String userID, String chnlId, String msgID, String reactionStr) throws EventLogServiceException
 	{
 		try {

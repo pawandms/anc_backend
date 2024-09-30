@@ -24,6 +24,8 @@ public class EventNotification {
 	private EventType type;
 	private EventEntityType entity;
 	private String entityId;
+	private String trgChnlID;
+	private String trgMsgID;
 	private UserActionType srcAction;
 	private String srcMsg;
 	
@@ -164,11 +166,20 @@ public class EventNotification {
 	public void setValidFlag(boolean validFlag) {
 		this.validFlag = validFlag;
 	}
-	
-	
-	
-	
-	
-	
 
+	public String getTrgChnlID() {
+		return trgChnlID;
+	}
+
+	public void setTrgChnlID(String trgChnlID) {
+		this.trgChnlID = trgChnlID;
+	}
+
+	public String getTrgMsgID() {
+		return trgMsgID;
+	}
+
+	public void setTrgMsgID(String trgMsgID) {
+		this.trgMsgID = trgMsgID;
+	}
 }

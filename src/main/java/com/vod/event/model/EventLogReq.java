@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.vod.app.action.vo.ActionLogReq;
 import com.vod.msg.enums.UserActionType;
 
 public class EventLogReq implements Serializable {
@@ -13,6 +14,7 @@ public class EventLogReq implements Serializable {
 	private UserActionType actionType;
 	
 	private List<EventLog> logs = new ArrayList<>();
+
 	public String getReqUserID() {
 		return reqUserID;
 	}
@@ -32,6 +34,6 @@ public class EventLogReq implements Serializable {
 	public void setLogs(List<EventLog> logs) {
 		this.logs = logs;
 	}
-	
-	
+
+
 }

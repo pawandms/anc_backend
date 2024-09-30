@@ -23,8 +23,6 @@ public class UserConnection {
 	private String modifiedBy;
 	private Date modifiedOn;
 
-	
-	
 	public String getId() {
 		return id;
 	}

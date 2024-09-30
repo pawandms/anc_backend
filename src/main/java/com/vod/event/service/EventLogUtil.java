@@ -166,7 +166,7 @@ public class EventLogUtil {
 	}
 	
 	
-	public EventLogReq creatUserCreateEventLogs(String reqUserID, String userID, String firstName, String lastName, VisibilityType visibility) throws EventLogServiceException
+	public EventLogReq createUserCreateEventLogs(String reqUserID, String userID, String firstName, String lastName, VisibilityType visibility) throws EventLogServiceException
 	{
 		EventLogReq result = null;
 		try {

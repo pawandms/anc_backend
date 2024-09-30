@@ -1,9 +1,9 @@
-package com.vod.msg.enums;
+package com.vod.app.action.enums;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum UserActionType {
+public enum UserOperationType {
 
 	Change_ProfileType("Change_ProfileType"),
 	Add_Friend_Request("Add_Friend_Request"),
@@ -16,32 +16,27 @@ public enum UserActionType {
 	Create_Msg_Chnl("Create_Msg_Chnl"),
 	Get_User_Notification("Get_User_Notification"),
 	Add_Msg_Reaction("Add_Msg_Reaction"),
-
-    // ActionLog Events
-    Add_User_Connection("Add_User_Connection"),
-    Add_Friend_Req_Sent("Add_Friend_Req_Sent"),
-    Add_Friend_Req_Receive("Add_Friend_Req_Receive"),
 	;
-	
-	
-	private String value;
-    private static Map<String, UserActionType> map = new HashMap<String, UserActionType>();
 
-	
-    private UserActionType(String value )
+
+	private String value;
+    private static Map<String, UserOperationType> map = new HashMap<String, UserOperationType>();
+
+
+    private UserOperationType(String value )
     {
     this.value =value;	
     }
     
     static {
-        for (UserActionType type : UserActionType.values()) {
+        for (UserOperationType type : UserOperationType.values()) {
             map.put(type.value, type);
         }
     }
     
     
-    public static UserActionType getType(String type) {
-        return (UserActionType) map.get(type);
+    public static UserOperationType getType(String type) {
+        return (UserOperationType) map.get(type);
     }
 
     

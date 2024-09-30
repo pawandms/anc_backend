@@ -9,6 +9,7 @@ public enum UserActionStatusType {
 	Approve("Approve"),
 	Reject("Reject"),
 	Block("Block"),
+    Pending("Pending"),
 	
 	;
 	

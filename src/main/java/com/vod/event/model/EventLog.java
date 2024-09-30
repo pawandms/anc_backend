@@ -25,10 +25,6 @@ public class EventLog implements Serializable {
 	private Meta trgValue;
 	private EventLogType logType;
 	private EventLogSubType logSubType;
-	private boolean userNotiFlag;
-	private boolean processFlag;
-	private UserActionType actionType;
-	private UserActionStatusType actionStatus;
 
 	private String trgMsg;
 	
@@ -120,38 +116,4 @@ public class EventLog implements Serializable {
 		this.trgValue = trgValue;
 	}
 
-	public boolean isUserNotiFlag() {
-		return userNotiFlag;
-	}
-
-	public void setUserNotiFlag(boolean userNotiFlag) {
-		this.userNotiFlag = userNotiFlag;
-	}
-
-	public boolean isProcessFlag() {
-		return processFlag;
-	}
-
-	public void setProcessFlag(boolean processFlag) {
-		this.processFlag = processFlag;
-	}
-
-	public UserActionType getActionType() {
-		return actionType;
-	}
-
-	public void setActionType(UserActionType actionType) {
-		this.actionType = actionType;
-	}
-
-	public UserActionStatusType getActionStatus() {
-		return actionStatus;
-	}
-
-	public void setActionStatus(UserActionStatusType actionStatus) {
-		this.actionStatus = actionStatus;
-	}
-
-	
-	
 }
